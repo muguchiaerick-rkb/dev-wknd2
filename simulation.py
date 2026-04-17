@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -23,7 +22,7 @@ class SimulationConfig:
     cost_model: CostModelConfig = CostModelConfig()
 
 
-def run_scenario(sim_config: SimulationConfig, reduction_percent: float, rng: np.random.Generator) -> Dict[str, np.ndarray]:
+def run_scenario(sim_config: SimulationConfig, reduction_percent: float, rng: np.random.Generator) -> dict[str, np.ndarray]:
     """Run one emissions reduction scenario and return simulation matrices."""
     reduction_fraction = reduction_percent / 100.0
 
@@ -38,7 +37,7 @@ def run_scenario(sim_config: SimulationConfig, reduction_percent: float, rng: np
     return {"emissions": emissions, "costs": costs}
 
 
-def run_monte_carlo(sim_config: SimulationConfig) -> Dict[str, Dict[str, np.ndarray]]:
+def run_monte_carlo(sim_config: SimulationConfig) -> dict[str, dict[str, np.ndarray]]:
     """Run baseline and intervention scenarios."""
     seed_sequence = np.random.SeedSequence(sim_config.seed)
     base_seed, intervention_seed = seed_sequence.spawn(2)
@@ -64,7 +63,7 @@ def summarize_paths(paths: np.ndarray) -> pd.DataFrame:
     )
 
 
-def compare_scenarios(results: Dict[str, Dict[str, np.ndarray]]) -> Dict[str, float]:
+def compare_scenarios(results: dict[str, dict[str, np.ndarray]]) -> dict[str, float]:
     """Compare baseline and intervention outcomes for emissions and costs."""
     baseline_emissions = results["baseline"]["emissions"].sum(axis=1)
     intervention_emissions = results["intervention"]["emissions"].sum(axis=1)
